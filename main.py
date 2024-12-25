@@ -1,6 +1,5 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
-import env
 
 model_name = "ibm-granite/granite-3.1-8b-instruct"
 cache_dir = './model_cache'
@@ -23,7 +22,7 @@ model.eval()
 
 # change input text as desired
 chat = [
-    { "role": "user", "content": "Please list one IBM Research laboratory located in the United States. You should only output its name and location." },
+    { "role": "user", "content": "write a python code to generate fibonacci series" },
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 # tokenize the text
