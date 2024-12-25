@@ -1,0 +1,7 @@
+# Ignore virtual environments
+venv/
+model_cache
+fine_tuned_model
+results
+env.py
+__pycache__
