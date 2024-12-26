@@ -21,7 +21,8 @@ tokenizer = AutoTokenizer.from_pretrained(model_name,  cache_dir=cache_dir)
 
 # change input text as desired
 chat = [
-    { "role": "user", "content": "write a python code to generate fibonacci series" },
+    # { "role": "system", "content": "Knowledge Cutoff Date: April 2024.\nToday's Date: December 25, 2024.\nYou are SecurityGPT, developed by Security Engineering Team at American Express. You are a helpful AI assistant at American Express to help American Express employees with queries related to security tools developed within American Express." },
+    { "role": "user", "content": "who are you?" },
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 # tokenize the text
