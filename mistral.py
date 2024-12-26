@@ -20,10 +20,24 @@ model = AutoModelForCausalLM.from_pretrained(model_name,
 tokenizer = AutoTokenizer.from_pretrained(model_name,  cache_dir=cache_dir, token=env.HF_ACCESS_TOKEN)
 model.eval()
 
-messages = [
+chat = [
     {"role": "system", "content": "You are a helpful AI assistant"},
     {"role": "user", "content": "Write a python code to generate fibonacci series"},
 ]
-chatbot = pipeline("text-generation", model=model, tokenizer=tokenizer)
-a=chatbot(messages)
-print(a)
+
+# chatbot = pipeline("text-generation", model=model, tokenizer=tokenizer)
+# a=chatbot(messages)
+# print(a)
+
+
+chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
+
+# tokenize the text
+input_tokens = tokenizer(chat, return_tensors="pt").to(device)
+# generate output tokens
+output = model.generate(**input_tokens, 
+                        max_new_tokens=500)
+# decode output tokens into text
+output = tokenizer.batch_decode(output)
+# print output
+print(output)

@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, GraniteForCausalLM, pipeline
 import torch
 
 model_name = "ibm-granite/granite-3.1-8b-instruct"
@@ -11,14 +11,13 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_use_double_quant=True,
 )
 
-model = AutoModelForCausalLM.from_pretrained(model_name,  
+model = GraniteForCausalLM.from_pretrained(model_name,  
                                              cache_dir=cache_dir, 
                                              device_map=device, 
                                              quantization_config=bnb_config, 
                                              torch_dtype=torch.bfloat16
                                              )
 tokenizer = AutoTokenizer.from_pretrained(model_name,  cache_dir=cache_dir)
-model.eval()
 
 # change input text as desired
 chat = [
