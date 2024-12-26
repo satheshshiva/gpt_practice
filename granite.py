@@ -18,7 +18,7 @@ model = AutoModelForCausalLM.from_pretrained(model_name,
                                              torch_dtype=torch.bfloat16
                                              )
 tokenizer = AutoTokenizer.from_pretrained(model_name,  cache_dir=cache_dir)
-config = AutoConfig.from_pretrained(model_name,  cache_dir=cache_dir)
+model.eval()
 
 # change input text as desired
 chat = [
