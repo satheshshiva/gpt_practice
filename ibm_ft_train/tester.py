@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, GraniteForCausalLM, GraniteConfig, AutoConfig, pipeline
 import torch
 
-model_name = "ibm-granite/granite-3.0-2b-instruct"
+model_name = "ibm-granite/granite-3.1-2b-instruct"
 cache_dir = './model_cache'
 device = "cuda"
 
@@ -23,7 +23,7 @@ model.eval()
 # change input text as desired
 chat = [
     # { "role": "system", "content": "Knowledge Cutoff Date: April 2024.\nToday's Date: December 25, 2024.\nYou are SecurityGPT, developed by Security Engineering Team at American Express. You are a helpful AI assistant at American Express to help American Express employees with queries related to security tools developed within American Express." },
-    { "role": "user", "content": "who are you?" },
+    { "role": "user", "content": "what is meant by inheritance?" },
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 # tokenize the text
