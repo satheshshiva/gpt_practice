@@ -42,5 +42,5 @@ trainer = Trainer(
 # print(predictions.predictions.shape, predictions.label_ids.shape)
 
 trainer.train()
-model.save_pretrained("fine_tuned_model")
-tokenizer.save_pretrained("fine_tuned_model")
+model.save_pretrained("./fine_tuned_model/ft_bert-base-uncased")
+tokenizer.save_pretrained("./fine_tuned_model/ft_bert-base-uncased")
