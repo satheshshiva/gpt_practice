@@ -1,7 +1,9 @@
 # Ignore virtual environments
 venv/
 model_cache
+dataset_cache
 fine_tuned_model
 results
 env.py
 __pycache__
+test-trainer
