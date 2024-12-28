@@ -32,7 +32,7 @@ prompt = "make it sound like a pirate said this, do not include any preamble or 
 input_tokens = tokenizer(prompt, return_tensors="pt").to(device)
 # generate output tokens
 output = model.generate(**input_tokens, 
-                        max_new_tokens=500)
+                        max_new_tokens=500, do_sample=True, top_p=0.95, temperature=0.7)
 # decode output tokens into text
 
 pr = tokenizer.decode(output[0], skip_special_tokens=True)
