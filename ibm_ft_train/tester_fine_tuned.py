@@ -2,7 +2,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 from peft import PeftModel
 
-model_name = "./fine_tuned_model/ft_granite_pirateified_qlora"
+model_name = "./fine_tuned_model/ft_granite_pirateified_8b_qlora"
 model_cache_dir = './model_cache'
 device = "cuda"
 
@@ -19,18 +19,13 @@ model = AutoModelForCausalLM.from_pretrained(model_name,
                                              torch_dtype=torch.bfloat16
                                              )
 
-
-
-tokenizer = AutoTokenizer.from_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
-
-
-
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.eval()
 
 # change input text as desired
 chat = [
     # { "role": "system", "content": "Knowledge Cutoff Date: April 2024.\nToday's Date: December 25, 2024.\nYou are SecurityGPT, developed by Security Engineering Team at American Express. You are a helpful AI assistant at American Express to help American Express employees with queries related to security tools developed within American Express." },
-    { "role": "user", "content": "who are you?" },
+    { "role": "user", "content": "what is inheritance?" },
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 

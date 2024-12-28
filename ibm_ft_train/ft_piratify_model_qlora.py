@@ -7,7 +7,7 @@ from peft import LoraConfig
 
 
 ## LOADING MODEL
-model_name = "ibm-granite/granite-3.1-2b-instruct"
+model_name = "ibm-granite/granite-3.1-8b-instruct"
 model_cache_dir = './model_cache'
 device = "cuda"
 
@@ -15,6 +15,7 @@ bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
     bnb_4bit_use_double_quant=True,
+    bnb_4bit_compute_dtype="float16",
 )
 
 model = AutoModelForCausalLM.from_pretrained(model_name,  
@@ -69,12 +70,14 @@ qlora_config = LoraConfig(
 training_args = TrainingArguments(
     output_dir="./results",
     learning_rate=2e-4,
-    per_device_train_batch_size=1,
-    per_device_eval_batch_size=1,
+    per_device_train_batch_size=1,  # Increase this to use more GPU memory
+    per_device_eval_batch_size=1, # Increase this to use more GPU memory
+    # gradient_accumulation_steps=16,  # Increase this to compensate
     num_train_epochs=1,
     logging_steps=100,
     fp16=True,
     report_to="none",
+    gradient_checkpointing=True,    # using this saves memory but slows down training
 )
 
 max_seq_length = 250
@@ -95,6 +98,6 @@ trainer = SFTTrainer(
 trainer.train()
 
 ## SAVING FINE TUNED MODEL
-trainer.model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
-tokenizer.save_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
+trainer.model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_8b_qlora")
+tokenizer.save_pretrained("./fine_tuned_model/ft_granite_pirateified_8b_qlora")
 
