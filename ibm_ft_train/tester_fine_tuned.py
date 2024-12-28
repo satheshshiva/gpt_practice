@@ -1,15 +1,38 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, GraniteForCausalLM, GraniteConfig, AutoConfig, pipeline
 import torch
+from peft import PeftModel
 
-model_name = "./fine_tuned_model/ft_granite_pirateified_qlora"
+model_name = "ibm-granite/granite-3.1-2b-instruct"
+model_cache_dir = './model_cache'
 device = "cuda"
 
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+)
 
-model = AutoModelForCausalLM.from_pretrained(model_name,  
+base_model = AutoModelForCausalLM.from_pretrained(model_name,  
+                                             cache_dir=model_cache_dir, 
                                              device_map=device, 
+                                             quantization_config=bnb_config, 
                                              torch_dtype=torch.bfloat16
                                              )
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+
+# 2. Load the fine-tuned adapter
+model = PeftModel.from_pretrained(
+    base_model,
+    "./fine_tuned_model/ft_granite_pirateified_qlora",
+    torch_dtype=torch.float16,
+    device_map="auto"
+)
+# 3. Merge weights (optional, but recommended for inference)
+model = model.merge_and_unload()
+tokenizer = AutoTokenizer.from_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
+
+
+
 model.eval()
 
 # change input text as desired
@@ -19,7 +42,7 @@ chat = [
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 
-prompt = "what is meant by inheritance?"
+prompt = "what does inheritance mean?"
 # tokenize the text
 input_tokens = tokenizer(prompt, return_tensors="pt").to(device)
 # generate output tokens

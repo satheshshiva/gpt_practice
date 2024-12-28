@@ -39,7 +39,7 @@ def reduce_dataset_size():
 
 pirate_dataset = load_from_disk('./fine_tuned_dataset/pirate_dataset')
 ## comment if not needed
-pirate_dataset = reduce_dataset_size()
+# pirate_dataset = reduce_dataset_size()
 
 
 def formatting_prompts_func(example):
@@ -84,7 +84,7 @@ trainer = SFTTrainer(
     args=training_args,
     train_dataset=pirate_dataset['train'],
     eval_dataset=pirate_dataset['test'],
-    tokenizer=tokenizer,
+    processing_class=tokenizer,
     peft_config = qlora_config,
     formatting_func=formatting_prompts_func,
     data_collator=collator,
@@ -95,6 +95,6 @@ trainer = SFTTrainer(
 trainer.train()
 
 ## SAVING FINE TUNED MODEL
-model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
+trainer.model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
 tokenizer.save_pretrained("./fine_tuned_model/ft_granite_pirateified_qlora")
 
