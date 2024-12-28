@@ -28,7 +28,6 @@ model.eval()
 dataset = load_dataset('alespalla/chatbot_instruction_prompts',
                        cache_dir=dataset_cache_dir)
 
-
 def pirateify(batch):
   prompts = [f"make it sound like a pirate said this, do not include any preamble or explanation only piratify the following: {response}" for response in batch['response']]
   # Tokenize the inputs in batch and move them to GPU
@@ -65,11 +64,13 @@ train_filtered = dataset['train'].select(range(6000)).filter(filter_long_example
 test_filtered = dataset['test'].select(range(500)).filter(filter_long_examples)
 
 print(f"train_filtered: {len(train_filtered)} observations\ntest_filtered: {len(test_filtered)} observations")
-pirate_train = train_filtered.select(range(1500)).map(pirateify, batched=True, batch_size=64)
-pirate_test = test_filtered.select(range(250)).map(pirateify, batched=True, batch_size=64)
+pirate_train = train_filtered.select(range(3)).map(pirateify, batched=True, batch_size=64)
+pirate_test = test_filtered.select(range(2)).map(pirateify, batched=True, batch_size=64)
 
 # Save the new dataset
 pirate_dataset = datasets.DatasetDict({
     'train': pirate_train,
     'test': pirate_test
 })
+
+pirate_dataset['train'].to_pandas().head()
