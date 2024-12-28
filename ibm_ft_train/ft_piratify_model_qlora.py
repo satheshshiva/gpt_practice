@@ -7,7 +7,7 @@ from peft import LoraConfig
 
 
 ## LOADING MODEL
-model_name = "ibm-granite/granite-3.1-8b-instruct"
+model_name = "ibm-granite/granite-3.1-2b-instruct"
 model_cache_dir = './model_cache'
 device = "cuda"
 
@@ -98,6 +98,6 @@ trainer = SFTTrainer(
 trainer.train()
 
 ## SAVING FINE TUNED MODEL
-trainer.model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_8b_qlora")
-tokenizer.save_pretrained("./fine_tuned_model/ft_granite_pirateified_8b_qlora")
+trainer.model.save_pretrained("./fine_tuned_model/ft_granite_pirateified_2b_qlora")
+tokenizer.save_pretrained("./fine_tuned_model/ft_granite_pirateified_2b_qlora")
 

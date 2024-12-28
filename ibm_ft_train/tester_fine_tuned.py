@@ -2,7 +2,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 from peft import PeftModel
 
-model_name = "./fine_tuned_model/ft_granite_pirateified_8b_qlora"
+model_name = "./fine_tuned_model/ft_granite_pirateified_2b_qlora"
 model_cache_dir = './model_cache'
 device = "cuda"
 
