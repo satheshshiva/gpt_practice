@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer, DataCollatorWithPadding
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments, Trainer, DataCollatorForLanguageModeling
 import torch
 from datasets import load_from_disk
 import datasets
@@ -41,7 +41,7 @@ pirate_dataset = load_from_disk('./fine_tuned_dataset/pirate_dataset')
 pirate_dataset = reduce_dataset_size()
 
 
-data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
 
 # Initialize the SFTTrainer

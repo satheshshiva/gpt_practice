@@ -75,7 +75,6 @@ training_args = TrainingArguments(
     logging_steps=100,
     fp16=True,
     report_to="none",
-    eval_strategy="steps"
 )
 
 max_seq_length = 250
@@ -91,8 +90,6 @@ trainer = SFTTrainer(
     data_collator=collator,
     # max_seq_length=max_seq_length,
 )
-# Clear the GPU cache to release any unused memory
-torch.cuda.empty_cache()
 
 ## TRAINING
 trainer.train()
