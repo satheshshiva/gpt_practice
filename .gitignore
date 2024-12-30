@@ -8,3 +8,4 @@ env.py
 __pycache__
 test-trainer
 fine_tuned_dataset
+embedding/tmp

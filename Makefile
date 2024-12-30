@@ -1,3 +1,6 @@
+vllm-2b-base:
+	vllm serve ibm-granite/granite-3.1-2b-base  --dtype float16  --max-model-len 12000 --chat-template ./chattemplate.jinga
+
 vllm-2b-custom:
 	vllm serve ibm-granite/granite-3.1-2b-instruct  --dtype float16  --max-model-len 12000 --enable-lora --lora-modules custom-domain-knowledge-2b=./fine_tuned_model/ft_custom_data
 
