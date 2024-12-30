@@ -1,6 +1,8 @@
-import os
+import os,torch
 from datasets import load_dataset
-from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, TrainingArguments, DataCollatorForLanguageModeling
+from peft import LoraConfig
+from trl import SFTTrainer
 
 # Step 1: Define Model and Dataset Paths
 MODEL_NAME = "ibm-granite/granite-3.1-2b-instruct"  # Replace with your pre-trained model (e.g., GPT-2, LLaMA).
@@ -33,9 +35,29 @@ data_collator = DataCollatorForLanguageModeling(
     mlm=False  # Set to False for causal language models like GPT.
 )
 
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_compute_dtype="float16",
+)
+
 # Step 5: Load Pretrained Model
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+model = AutoModelForCausalLM.from_pretrained(MODEL_NAME,
+                                              quantization_config=bnb_config, 
+                                             torch_dtype=torch.float16)
 model.eval()
+
+
+
+# Apply qLoRA
+qlora_config = LoraConfig(
+    r=16,  # The rank of the Low-Rank Adaptation
+    lora_alpha=32,  # Scaling factor for the adapted layers
+    target_modules=["q_proj", "v_proj"],  # Layer names to apply LoRA to
+    lora_dropout=0.1,
+    bias="none"
+)
 
 # Step 6: Define Training Arguments
 training_args = TrainingArguments(
@@ -52,17 +74,18 @@ training_args = TrainingArguments(
 )
 
 # Step 7: Train the Model
-trainer = Trainer(
+trainer = SFTTrainer(
     model=model,
-    tokenizer=tokenizer,
     args=training_args,
     train_dataset=tokenized_dataset["train"],
-    # eval_dataset=tokenized_dataset["validation"] if "validation" in tokenized_dataset else None,
+    processing_class=tokenizer,
+    peft_config = qlora_config,
     data_collator=data_collator,
+    # max_seq_length=max_seq_length,
 )
 
 trainer.train()
 
 # Step 8: Save the Model
-model.save_pretrained("./fine_tuned_model/fine_tuned_model")
-tokenizer.save_pretrained("./fine_tuned_model/fine_tuned_model")
+trainer.model.save_pretrained("./fine_tuned_model/ft_text")
+trainer.processing_class.save_pretrained("./fine_tuned_model/ft_text")
