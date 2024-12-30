@@ -1,0 +1,1 @@
+vllm serve ibm-granite/granite-3.1-2b-instruct  --dtype bfloat16  --max-model-len 12000
