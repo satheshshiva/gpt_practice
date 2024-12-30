@@ -48,8 +48,6 @@ model = AutoModelForCausalLM.from_pretrained(MODEL_NAME,
                                              torch_dtype=torch.float16)
 model.eval()
 
-
-
 # Apply qLoRA
 qlora_config = LoraConfig(
     r=16,  # The rank of the Low-Rank Adaptation
@@ -87,5 +85,5 @@ trainer = SFTTrainer(
 trainer.train()
 
 # Step 8: Save the Model
-trainer.model.save_pretrained("./fine_tuned_model/ft_text")
-trainer.processing_class.save_pretrained("./fine_tuned_model/ft_text")
+trainer.model.save_pretrained("./fine_tuned_model/ft_custom_data")
+trainer.processing_class.save_pretrained("./fine_tuned_model/ft_custom_data")
