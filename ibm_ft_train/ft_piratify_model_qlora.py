@@ -8,7 +8,6 @@ from peft import LoraConfig
 
 ## LOADING MODEL
 model_name = "ibm-granite/granite-3.1-2b-instruct"
-model_cache_dir = './model_cache'
 device = "cuda"
 
 bnb_config = BitsAndBytesConfig(
@@ -19,12 +18,11 @@ bnb_config = BitsAndBytesConfig(
 )
 
 model = AutoModelForCausalLM.from_pretrained(model_name,  
-                                             cache_dir=model_cache_dir, 
                                             #  device_map=device, 
                                              quantization_config=bnb_config, 
                                              torch_dtype=torch.bfloat16
                                              )
-tokenizer = AutoTokenizer.from_pretrained(model_name,  cache_dir=model_cache_dir)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.eval()
 
 
