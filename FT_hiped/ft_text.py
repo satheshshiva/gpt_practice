@@ -6,7 +6,7 @@ from trl import SFTTrainer
 
 # Step 1: Define Model and Dataset Paths
 MODEL_NAME = "ibm-granite/granite-3.1-2b-instruct"  # Replace with your pre-trained model (e.g., GPT-2, LLaMA).
-DATASET_PATH = "FT_hiped/text2.txt"  # Directory with text files.
+DATASET_PATH = "FT_hiped/sathesh.txt"  # Directory with text files.
 
 # Step 2: Load Dataset
 def load_text_data(path):
@@ -61,11 +61,11 @@ qlora_config = LoraConfig(
 training_args = TrainingArguments(
    output_dir="./results",
     learning_rate=2e-4,
-    per_device_train_batch_size=1,  # Increase this to use more GPU memory
-    per_device_eval_batch_size=1, # Increase this to use more GPU memory
+    per_device_train_batch_size=8,  # Increase this to use more GPU memory
+    per_device_eval_batch_size=8, # Increase this to use more GPU memory
     # gradient_accumulation_steps=16,  # Increase this to compensate
     num_train_epochs=1,
-    logging_steps=100,
+    logging_steps=5,
     fp16=True,
     report_to="none",
     gradient_checkpointing=True,    # using this saves memory but slows down training
