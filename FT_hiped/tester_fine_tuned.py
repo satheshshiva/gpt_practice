@@ -23,7 +23,7 @@ model.eval()
 # change input text as desired
 chat = [
     # { "role": "system", "content": "Knowledge Cutoff Date: April 2024.\nToday's Date: December 25, 2024.\nYou are SecurityGPT, developed by Security Engineering Team at American Express. You are a helpful AI assistant at American Express to help American Express employees with queries related to security tools developed within American Express." },
-    { "role": "user", "content": "who is Sathesh?" },
+    { "role": "user", "content": "what is kasjdnf?" },
 ]
 chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
 
@@ -31,7 +31,10 @@ chat = tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt
 input_tokens = tokenizer(chat, return_tensors="pt").to(device)
 # generate output tokens
 output = model.generate(**input_tokens, 
-                        max_new_tokens=500)
+                        max_new_tokens=500,
+                        do_sample=True, 
+                        top_p=0.95, 
+                        temperature=0.7)
 # decode output tokens into text
 pr=""
 for i in range(len(output)):

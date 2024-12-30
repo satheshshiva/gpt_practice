@@ -6,7 +6,7 @@ from trl import SFTTrainer
 
 # Step 1: Define Model and Dataset Paths
 MODEL_NAME = "ibm-granite/granite-3.1-2b-instruct"  # Replace with your pre-trained model (e.g., GPT-2, LLaMA).
-DATASET_PATH = "FT_hiped/sathesh.txt"  # Directory with text files.
+DATASET_PATH = "FT_hiped/kasjdnf.txt"  # Directory with text files.
 
 # Step 2: Load Dataset
 def load_text_data(path):
